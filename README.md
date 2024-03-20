@@ -39,7 +39,6 @@ Free, open source and distributed bot for twitch streamers that provides hassle 
         docker build -t broccoli-api .
         docker run -p 3000:5000 broccoli-api
         ```
-## Nerd shit
 ### Tech stack
 * React + Vite + Typescript
 * Go + Gin
@@ -50,3 +49,10 @@ Free, open source and distributed bot for twitch streamers that provides hassle 
 
 ### System Design
 ![alt text](https://github.com/rahulsm20/twitch-songbot/assets/77540672/f21d3eba-42c1-4810-a3cb-c48ca5ab169d)
+
+### Upcoming Features
+- [ ] Multi-source requests  
+- [ ] Ability to add new commands and edit existing ones  
+- [ ] Request Analytics  
+- [ ] Plug and play services  
+- [ ] Integration with Youtube & Kick  
