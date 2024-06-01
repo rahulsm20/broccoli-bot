@@ -56,7 +56,6 @@ func startIRCClient() {
 }
 
 func main() {
-	go startIRCClient()
 	port := os.Getenv("SERVER_PORT")
 	app := gin.Default()
 	config := cors.DefaultConfig()
@@ -83,5 +82,6 @@ func main() {
 		routes.SongRoutes(musicGroup)
 	}
 
+	go startIRCClient()
 	app.Run(fmt.Sprintf(":" + port))
 }

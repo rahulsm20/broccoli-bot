@@ -84,6 +84,39 @@ func (q *Queries) GetAllTokens(ctx context.Context) ([]Token, error) {
 	return items, nil
 }
 
+const getCommands = `-- name: GetCommands :many
+SELECT id, code, description, created_at, updated_at FROM command
+`
+
+func (q *Queries) GetCommands(ctx context.Context) ([]Command, error) {
+	rows, err := q.db.QueryContext(ctx, getCommands)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Command
+	for rows.Next() {
+		var i Command
+		if err := rows.Scan(
+			&i.ID,
+			&i.Code,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getUsers = `-- name: GetUsers :many
 
 SELECT DISTINCT username FROM tokens WHERE provider= ($1)

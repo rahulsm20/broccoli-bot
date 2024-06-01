@@ -12,3 +12,6 @@ SELECT username,email,avatarURL FROM tokens WHERE token = ($1);
 
 -- name: GetUsers :many
 SELECT DISTINCT username FROM tokens WHERE provider= ($1);
+
+-- name: GetCommands :many
+SELECT * FROM command;

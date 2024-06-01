@@ -1,10 +1,14 @@
+import { SongType } from "../types";
 import { msToMinutesAndSeconds } from "../utils";
 
 type TableProps = {
-  page: number;
-  queue: any[];
+  queue: SongType[];
+  fetchingQueue: boolean;
 };
-const Table = ({ page, queue }: TableProps) => {
+const Table = ({ queue, fetchingQueue }: TableProps) => {
+  if (fetchingQueue) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="overflow-x-auto rounded-xl  p-5">
       <table className="table table-zebra table-xs">
