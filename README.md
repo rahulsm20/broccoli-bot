@@ -48,9 +48,9 @@ Free, open source and distributed bot for twitch streamers that provides hassle 
 <!-- * PostgreSQL -->
 
 ### System Design
-![alt text](https://github.com/rahulsm20/twitch-songbot/assets/77540672/f21d3eba-42c1-4810-a3cb-c48ca5ab169d)
+![system-design](https://github.com/user-attachments/assets/31797fe7-d704-477f-afc2-fc0b574cca94)
 
-### Upcoming Features
+### Possible Future Features
 - [ ] Multi-source requests  
 - [ ] Ability to add new commands and edit existing ones  
 - [ ] Request Analytics  
