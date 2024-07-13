@@ -15,6 +15,7 @@ import (
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/rahulsm20/songbot/pkg/initializers"
+	"github.com/rahulsm20/songbot/pkg/postgres"
 	"github.com/rahulsm20/songbot/pkg/utils"
 	"github.com/rahulsm20/songbot/pkg/utils/constants"
 )
@@ -113,6 +114,23 @@ func AuthCallback(c *gin.Context) {
 		twitchUser["twitch"] = userData
 		setUserCookie(c, user)
 
+		newId, err := uuid.NewUUID()
+		if err != nil {
+			c.JSON(400, fmt.Sprintf("Failed to generate id: %v", err))
+			return
+		}
+		userParams := postgres.AddUserParams{
+			ID:        newId,
+			Username:  user.Name,
+			Email:     user.Email,
+			CreatedAt: time.Now(),
+		}
+		newUser, err := initializers.DB.AddUser(c, userParams)
+		if err != nil {
+			c.JSON(400, fmt.Sprintf("Failed to create user: %v", err))
+			return
+		}
+		fmt.Print(newUser)
 		lifetime = user.ExpiresAt.Sub(time.Now().UTC())
 		userDataJSON, err := utils.SerializeUserData(twitchUser)
 		if err != nil {

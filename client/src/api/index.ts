@@ -42,4 +42,13 @@ export const fetchQueue = async () => {
   } catch (err) {
     console.log(`${err}`);
   }
-}
+};
+
+export const getCommands = async () => {
+  try {
+    const res = await api.get(`/auth/commands`);
+    return res.data;
+  } catch (err) {
+    console.log(`${err}`);
+  }
+};

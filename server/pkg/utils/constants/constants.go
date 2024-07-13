@@ -18,4 +18,6 @@ const (
 	ProviderKey providerKey = "provider"
 	MaxAge                  = 86400 * 30
 	IsProd                  = false
+	SongRequest             = "sr"
+	Remove                  = "rm"
 )

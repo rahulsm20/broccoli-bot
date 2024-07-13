@@ -10,6 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type Command struct {
+	ID          uuid.UUID `json:"id"`
+	Code        string    `json:"code"`
+	Description string    `json:"description"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 type Token struct {
 	ID        uuid.UUID `json:"id"`
 	Provider  string    `json:"provider"`
@@ -18,4 +26,17 @@ type Token struct {
 	Token     string    `json:"token"`
 	Avatarurl string    `json:"avatarurl"`
 	CreatedAt time.Time `json:"created_at"`
+}
+
+type User struct {
+	ID        uuid.UUID `json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Email     string    `json:"email"`
+	Username  string    `json:"username"`
+}
+
+type UserCommand struct {
+	UserID    uuid.UUID `json:"user_id"`
+	CommandID uuid.UUID `json:"command_id"`
 }

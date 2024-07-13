@@ -27,7 +27,7 @@ func AddToQueue(c *gin.Context) {
 		c.JSON(400, fmt.Sprintf("couldn't get access token: %v", err))
 		return
 	}
-	fmt.Println("rawUser: ", rawUser)
+	// fmt.Println("rawUser: ", rawUser)
 
 	user, err := utils.UnmarshalUserData(rawUser)
 	if err != nil {
@@ -64,7 +64,7 @@ func GetQueue(c *gin.Context) {
 		c.JSON(400, fmt.Sprintf("couldn't get access token: %v", err))
 		return
 	}
-	fmt.Println("rawUser: ", rawUser)
+	// fmt.Println("rawUser: ", rawUser)
 	user, err := utils.UnmarshalUserData(rawUser)
 	// err = json.Unmarshal([]byte(rawUser), &user)
 	if err != nil {

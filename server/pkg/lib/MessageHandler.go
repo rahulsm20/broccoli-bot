@@ -55,13 +55,13 @@ func (bot *TwitchBot) MessageHandler(message twitch.PrivateMessage) {
 
 				fmt.Println("Response Body:", string(body))
 				bot.Client.Say(message.Channel, fmt.Sprintf("Added song to queue requested by @%v", message.User.Name))
+			} else if command == "so" {
+				fmt.Println("shotout to: ", message.Message)
+				bot.Client.Say(message.Channel, fmt.Sprintf("Go checkout @%v at https://twitch.tv/%v", message.User.Name, message.User.Name))
 			}
 		}
 
 	}
-	// else if message.User.DisplayName != twitchUsername {
-	// 	client.Say(message.Channel, fmt.Sprintf("Hello! @%v", message.User.Name))
-	// }
 	log.Printf("[%s] <%s>: %s\n", message.Channel, message.User.Name, message.Message)
 	fmt.Println("chatter: ", message.User.Name)
 }

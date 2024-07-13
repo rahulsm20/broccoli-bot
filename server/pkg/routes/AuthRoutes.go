@@ -10,5 +10,6 @@ func AuthRoutes(r *gin.RouterGroup) {
 	r.GET("/:provider/validate", controllers.ValidateToken)
 	r.GET("/access/:channel", controllers.GetUserData)
 	r.GET("/bot", controllers.GetBotToken)
+	r.GET("/commands", controllers.GetCommands)
 	r.GET("/", controllers.AuthHandler)
 }

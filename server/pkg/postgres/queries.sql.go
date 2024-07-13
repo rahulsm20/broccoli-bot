@@ -12,6 +12,35 @@ import (
 	"github.com/google/uuid"
 )
 
+const addUser = `-- name: AddUser :one
+INSERT INTO users (id,username,email,created_at,updated_at) VALUES ($1,$2,$3,$4,$4) RETURNING id, created_at, updated_at, email, username
+`
+
+type AddUserParams struct {
+	ID        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
+}
+
+func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, addUser,
+		arg.ID,
+		arg.Username,
+		arg.Email,
+		arg.CreatedAt,
+	)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Email,
+		&i.Username,
+	)
+	return i, err
+}
+
 const addUserToken = `-- name: AddUserToken :one
 INSERT INTO tokens (id,provider,username,email,avatarURL,token,created_at) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id, provider, username, email, token, avatarurl, created_at
 `
@@ -49,6 +78,39 @@ func (q *Queries) AddUserToken(ctx context.Context, arg AddUserTokenParams) (Tok
 	return i, err
 }
 
+const createDefaultCommands = `-- name: CreateDefaultCommands :many
+INSERT INTO command (id,code,description,created_at,updated_at) VALUES ('5f601536-dce6-4fa9-a44a-2deaf5e0aba8', 'sr', 'Request a song', '2024-07-11T08:45:07.164Z','2024-07-11T08:45:07.164Z') RETURNING id, code, description, created_at, updated_at
+`
+
+func (q *Queries) CreateDefaultCommands(ctx context.Context) ([]Command, error) {
+	rows, err := q.db.QueryContext(ctx, createDefaultCommands)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Command
+	for rows.Next() {
+		var i Command
+		if err := rows.Scan(
+			&i.ID,
+			&i.Code,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getAllTokens = `-- name: GetAllTokens :many
 SELECT id, provider, username, email, token, avatarurl, created_at from tokens
 `
@@ -84,26 +146,84 @@ func (q *Queries) GetAllTokens(ctx context.Context) ([]Token, error) {
 	return items, nil
 }
 
+const getCommands = `-- name: GetCommands :many
+SELECT id, code, description, created_at, updated_at FROM command
+`
+
+func (q *Queries) GetCommands(ctx context.Context) ([]Command, error) {
+	rows, err := q.db.QueryContext(ctx, getCommands)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Command
+	for rows.Next() {
+		var i Command
+		if err := rows.Scan(
+			&i.ID,
+			&i.Code,
+			&i.Description,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUser = `-- name: GetUser :one
+SELECT id, created_at, updated_at, email, username FROM users WHERE username=($1)
+`
+
+func (q *Queries) GetUser(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, username)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Email,
+		&i.Username,
+	)
+	return i, err
+}
+
 const getUsers = `-- name: GetUsers :many
 
-SELECT DISTINCT username FROM tokens WHERE provider= ($1)
+SELECT id, provider, username, email, token, avatarurl, created_at FROM tokens WHERE provider= ($1)
 `
 
 // -- name: GetQueue :many
 // SELECT id,title,artist,requested_by FROM queue WHERE channel =($1);
-func (q *Queries) GetUsers(ctx context.Context, provider string) ([]string, error) {
+func (q *Queries) GetUsers(ctx context.Context, provider string) ([]Token, error) {
 	rows, err := q.db.QueryContext(ctx, getUsers, provider)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []string
+	var items []Token
 	for rows.Next() {
-		var username string
-		if err := rows.Scan(&username); err != nil {
+		var i Token
+		if err := rows.Scan(
+			&i.ID,
+			&i.Provider,
+			&i.Username,
+			&i.Email,
+			&i.Token,
+			&i.Avatarurl,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
-		items = append(items, username)
+		items = append(items, i)
 	}
 	if err := rows.Close(); err != nil {
 		return nil, err

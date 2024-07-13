@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { validateToken } from "./api";
+
+import { RotateCw } from "lucide-react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Commands from "./pages/Commands";
 import Home from "./pages/Home";
 import {
   setSpotifyAuthenticated,
@@ -9,7 +13,6 @@ import {
   setTwitchUser,
 } from "./store/authSlice";
 import { RootState } from "./types";
-import { Navigate, Route,Routes } from "react-router-dom";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,7 @@ function App() {
     try {
       const spotifyUser = await validateToken("spotify");
       const twitchUser = await validateToken("twitch");
-      console.log(twitchUser, spotifyUser)
+      console.log(twitchUser, spotifyUser);
       if (twitchUser?.username) {
         dispatch(setTwitchUser(twitchUser));
         dispatch(setTwitchAuthenticated(true));
@@ -47,16 +50,16 @@ function App() {
 
   if (loading) {
     return (
-      <img
-        src="https://blog.hubspot.com/hs-fs/hubfs/7a8f8d634013568124e130728834d47a.gif?width=1500&name=7a8f8d634013568124e130728834d47a.gif"
-        className="w-screen h-screen"
-      />
+      <div className="w-full  h-screen flex items-center justify-center align-middle">
+        <RotateCw className="flex items-center justify-center animate-spin w-20" />
+      </div>
     );
   }
   return (
     <Routes>
-    <Route path="/" element={<Navigate to="/queue"/>} />
-    <Route path="/queue" element={<Home/>} />
+      <Route path="/" element={<Navigate to="/queue" />} />
+      <Route path="/queue" element={<Home />} />
+      <Route path="/commands" element={<Commands />} />
     </Routes>
   );
 }
