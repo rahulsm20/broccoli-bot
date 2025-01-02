@@ -115,13 +115,23 @@ func validateAndStartIRC() {
 		pattern := "user:*"
 		var cursor uint64
 		var channels []string
-		var result []string
-		result, _, err := redisClient.Scan(ctx, cursor, pattern, 10).Result()
-		if err != nil {
-			fmt.Printf("Error during SCAN: %v\n", err)
-			return
+		for {
+			var keys []string
+			var err error
+			keys, cursor, err = redisClient.Scan(ctx, cursor, pattern, 10).Result()
+			if err != nil {
+				fmt.Printf("Error during SCAN: %v\n", err)
+				return
+			}
+
+			channels = append(channels, keys...)
+
+			if cursor == 0 {
+				break
+			}
 		}
-		channels = append(channels, result...)
+
+		fmt.Printf("\nFound channels: %v", channels)
 		var validChannels []User
 		for _, channel := range channels {
 			val := redisClient.Get(ctx, channel)

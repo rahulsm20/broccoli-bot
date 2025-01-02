@@ -8,10 +8,11 @@ Free, open source and distributed bot for twitch streamers that provides hassle 
 - Login with your Spotify
 - Default commands
   - !sr
-    - function: removes your latest requested song from the queue
+    - function: adds a new song from the queue
     - params (any one)
       - song and artist name
       - spotify link
+    - example: !sr <>
   - !rm - remove requested song
     - function: removes your latest requested song from the queue
     - params: none

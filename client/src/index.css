@@ -77,5 +77,6 @@ a:hover {
 }
 
 :root {
+  font-family: "Inter";
   @apply bg-background;
 }

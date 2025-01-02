@@ -53,7 +53,7 @@ const Body = () => {
     (state: RootState) => state.auth.twitch.isAuthenticated
   );
   return (
-    <div className="flex flex-col gap-5 items-center justify-center p-10">
+    <div className="flex flex-col gap-5 items-center justify-center   ">
       <div className="flex flex-col md:flex-row gap-5">
         {spotifyIsAuthenticated ? (
           <button className="flex btn border-0 bg-green-800 hover:bg-green-700 text-white rounded-full text-current">
@@ -82,7 +82,7 @@ const Body = () => {
       !fetchingQueue &&
       queueSize &&
       queueSize > 0 ? (
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col items-start mx-20">
           {currentPlaying && currentPlaying?.id && (
             <CurrentPlaying
               currentPlaying={currentPlaying}
